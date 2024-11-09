@@ -49,7 +49,7 @@ export default function SignIn() {
           </div>
           <form onSubmit={handleSubmit(handleSignIn)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Your email</Label>
+              <Label htmlFor="email">Your e-mail</Label>
               <Input id="email" type="email" {...register('email')} />
             </div>
             <Button disabled={isSubmitting} className="w-full" type="submit">

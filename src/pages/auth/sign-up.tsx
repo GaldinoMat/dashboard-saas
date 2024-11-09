@@ -75,7 +75,7 @@ export default function SignUp() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Your email</Label>
+              <Label htmlFor="email">Your e-mail</Label>
               <Input id="email" type="email" {...register('email')} />
             </div>
             <div className="space-y-2">
