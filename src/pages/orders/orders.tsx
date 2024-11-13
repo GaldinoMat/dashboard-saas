@@ -1,18 +1,52 @@
+import { useQuery } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
+import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 
+import { getOrders } from '@/api/get-orders'
 import Pagination from '@/components/pagination'
 import {
-    Table,
-    TableBody,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table'
 
 import OrderTableFilters from './components/order-table-filters'
 import OrderTableRow from './components/order-table-row'
 
 export default function Orders() {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const orderId = searchParams.get('orderId')
+  const customerName = searchParams.get('customerName')
+  const status = searchParams.get('status')
+
+  const pageIndex = z.coerce
+    .number()
+    .transform((page) => page - 1)
+    .parse(searchParams.get('page') ?? '1')
+
+  const { data: result } = useQuery({
+    queryKey: ['orders', pageIndex, orderId, customerName, status],
+    queryFn: () =>
+      getOrders({
+        pageIndex,
+        orderId,
+        customerName,
+        status: status === 'all' ? null : status,
+      }),
+  })
+
+  function handlePaginate(pageIndex: number) {
+    setSearchParams((prevState) => {
+      prevState.set('page', (pageIndex + 1).toString())
+
+      return prevState
+    })
+  }
+
   return (
     <main>
       <Helmet title="Orders" />
@@ -36,13 +70,21 @@ export default function Orders() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Array.from({ length: 10 }).map((_, i) => (
-                  <OrderTableRow key={i} />
-                ))}
+                {result &&
+                  result.orders.map((order) => (
+                    <OrderTableRow key={order.orderId} order={order} />
+                  ))}
               </TableBody>
             </Table>
           </div>
-          <Pagination pageIndex={0} totalCount={105} perPage={10} />
+          {result && (
+            <Pagination
+              onPageChange={handlePaginate}
+              pageIndex={result.meta.pageIndex}
+              totalCount={result.meta.totalCount}
+              perPage={result.meta.perPage}
+            />
+          )}
         </div>
       </div>
     </main>
