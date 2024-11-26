@@ -33,8 +33,6 @@ export default function SignUp() {
   const navigate = useNavigate()
 
   async function handleSignUp(data: signUpForm) {
-    console.log(data)
-
     registerBusinessFn({
       email: data.email,
       managerName: data.managerName,

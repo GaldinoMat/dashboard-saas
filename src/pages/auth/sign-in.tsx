@@ -32,9 +32,12 @@ export default function SignIn() {
   })
 
   async function handleSignIn(data: signInForm) {
-    authenticate({ email: data.email })
-
-    toast.success('We sent an auth link to your e-mail')
+    try {
+      await authenticate({ email: data.email })
+      toast.success('We sent an auth link to your e-mail')
+    } catch (error) {
+      toast.error('Invalid credentials')
+    }
   }
 
   return (
