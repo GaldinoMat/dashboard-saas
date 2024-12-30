@@ -85,16 +85,12 @@ export default function StoreProfileDialog() {
   })
 
   async function handleUpdateProfile(data: StoreProfileSchema) {
-    try {
-      await updateProfileFn({
-        name: data.name,
-        description: data.description,
-      })
-
-      toast.success('Profile updated successfully')
-    } catch (error) {
-      toast.error('Profile update failed. Try again.')
-    }
+    await updateProfileFn({
+      name: data.name,
+      description: data.description,
+    })
+      .then(() => toast.success('Profile updated successfully'))
+      .catch(() => toast.error('Profile update failed. Try again.'))
   }
 
   return (

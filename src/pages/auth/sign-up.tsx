@@ -33,19 +33,21 @@ export default function SignUp() {
   const navigate = useNavigate()
 
   async function handleSignUp(data: signUpForm) {
-    registerBusinessFn({
+    await registerBusinessFn({
       email: data.email,
       managerName: data.managerName,
       phone: data.phone,
       restaurantName: data.restaurantName,
     })
-
-    toast.success('Business registered successfully', {
-      action: {
-        label: 'Login',
-        onClick: () => navigate(`/sign-in?email=${data.email}`),
-      },
-    })
+      .then(() =>
+        toast.success('Business registered successfully', {
+          action: {
+            label: 'Login',
+            onClick: () => navigate(`/sign-in?email=${data.email}`),
+          },
+        }),
+      )
+      .catch(() => toast.error('Error while registering restaurant'))
   }
 
   return (

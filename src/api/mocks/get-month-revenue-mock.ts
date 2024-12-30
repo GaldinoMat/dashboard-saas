@@ -2,13 +2,13 @@ import { http, HttpResponse } from 'msw'
 
 import { GetMonthRevenueResponse } from '../get-month-revenue'
 
-export const getMonthRevenueOrdersAmountMock = http.get<
+export const getMonthRevenueMock = http.get<
   never,
   never,
   GetMonthRevenueResponse
->('/metrics/month-orders-amount', () => {
+>('/metrics/month-receipt', () => {
   return HttpResponse.json({
-    receipt: 2000000,
-    diffFromLastMonth: 70,
+    receipt: 20000,
+    diffFromLastMonth: 10,
   })
 })
